@@ -1,0 +1,68 @@
+---
+title: "Exploring scanonevar()"
+author: "Bowen Jones"
+date: "6/13/2020"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE, comment = NA, message = FALSE)
+```
+
+### Introduction  
+Fundamental to our stress-splicing analysis is the `vQTL` function `scanonevar()`. This function seeks to identify regions of the genome that impact the phenotype *mean* and/or the phenotype *variance* by comparing two models; the alternative model, consisting of nuisance factors and locus effects, and the null model, consisting only of nuisance factors. We will demonstrate its use with an example provided by Robert Corty.  
+  
+### Example  
+```{r}
+library(qtl)
+library(vqtl)
+```  
+  
+The `scanonevar()` function requires an object of type `cross`. Using the code below, we simulate an object of this type with a function from `qtl`. The object contains two dataframes: `test.cross$geno` and `test.cross$pheno` which contain genetic and phenotypic information.  
+```{r}
+set.seed(27599)
+test.cross <- qtl::sim.cross(map = qtl::sim.map(len = rep(20, 5), eq.spacing = FALSE))
+names(test.cross)
+```  
+  
+To demonstrate the use of nuisance factors, we also create two additional factors for the `test.cross$pheno` dataframe:  
+```{r}
+test.cross[['pheno']][['sex']] <- sample(x = c(0, 1),
+                                         size = qtl::nind(test.cross),
+                                         replace = TRUE)
+test.cross[['pheno']][['sire']] <- factor(x = sample(x = 1:5,
+                                                     size = qtl::nind(test.cross),
+                                                     replace = TRUE))
+names(test.cross$pheno)
+```  
+These two factors, "sex" and "sire", will be provided to the model as additional factors to account for. These factors can be of immediate relevance or tertiary measures whose effects we wish to remove from analysis.  
+  
+Next, we again rely on a `qtl` function to calculate the genotype probabilities at each locus:  
+```{r}
+test.cross <- qtl::calc.genoprob(cross = test.cross, step = 2)
+```  
+  
+Finally, we can call `scanonevar()`  
+```{r}
+sov <- scanonevar(cross = test.cross,
+          mean.formula = phenotype ~ sex + D1M2 + mean.QTL.add + mean.QTL.dom,
+          var.formula = ~ sire + D2M3 + var.QTL.add + var.QTL.dom)
+```
+Each argument supplied above is required by the function. It should also be noted that a response variable from `test.cross$pheno` must be provided for the `mean.formula` model.
+Unpacking the arguments further, we note that DXMX are marker names, "sex" and "sire" are the nuisance factors from `pheno` and each "..QTL.." term represents locus effects.  
+  
+  
+Now, recall that `scanonevar()` compares two models: an alternative and a null model. Our alternative models are as follows:   
+$Phenotype = \beta_1(sex) + \beta_2(D1M2) + \beta_3(Locus Effect_1) + \beta_4(Locus Effect_2)$
+$log(variance) = \beta_1(sex) + \beta_2(D1M2) + \beta_3(Locus Effect_1) + \beta_4(Locus Effect_2)$  
+  
+In our example, the hypothesis tested by `scanonevar()` is as follows:  
+  
+$H_0: \beta_3 = \beta_4 = 0$ vs $H_A:$ at least one is nonzero.  
+  
+The results of `scanonevar()` are reproduced below:  
+```{r, echo = FALSE}
+sov$result
+```  
+The results for each test are contained in columns of the `sov$result` output; `mQTL.lod` supplies the test statistic for the effect of each locus on the phenotype mean, `mQTL.asymp.p` provides the associated p-value, `vQTL.lod` gives the test statistic for the effect of each locus on the phenotype variance, and so on. The p-value is determined by `1-pchisq(LOD, df)` where $df =$ (# of variables under alternative model) - (# of variables under null model).  
+  
