@@ -1,0 +1,31 @@
+---
+title: "Untitled"
+author: "Bowen Jones"
+date: "7/24/2020"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+set.seed(0)
+```
+ 
+```{r}
+start <- Sys.time()
+
+
+rc.simu <- t(matrix(replicate(10^5, simu.rc.logis()), nrow = 8))
+rc.simu <- as.data.frame(rc.simu)
+names(rc.simu) <- c("rc.alpha", "rc.beta", "rc.mu", "rc.gamma", "comp.alpha", "comp.beta", "comp.mu", "comp.gamma")
+
+apply(rc.simu, 2, mean)
+apply(rc.simu, 2, sd)
+
+end <- Sys.time()
+end-start
+```
+q <- t(matrix(rep(simu.rc.logis(), 10^5), nrow = 8))
+
+```{r}
+```
+
