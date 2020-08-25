@@ -1,4 +1,3 @@
-install.packages("dplyr"); install.packages("survival")
 require(dplyr); require(survival);
 
 logN.multi<-function(para, simu.obs.func,sep)
