@@ -8,6 +8,8 @@
 #SBATCH --mail-user=bwj9135@uncw.edu
 #SBATCH --mail-type=all    # Send email at begin and end of job
 
+module load Rstats
+
 # Other commands must follow all #SBATCH directives...
 Rscript --verbose ./rcsim100.R> ./output.Rout
 
