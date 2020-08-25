@@ -121,7 +121,7 @@ obj.func.bje<-function(para,sep,flist.data, which.obj=1)
 
 #################################################################################
 
-n.runs <- 2
+n.runs <- 10
 rc.simu <- data.frame(matrix(nrow = n.runs, ncol = 13))
 names(rc.simu) <- c("beta0", "beta1", "beta2", "beta3", "beta4", "beta5", "gamma0", "gamma1", "gamma2", "gamma3", "gamma4", "gamma5", "gamma6")
 
