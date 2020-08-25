@@ -1,5 +1,5 @@
 #!/bin/bash
-#SBATCH -J rcsimu      # Job name
+#SBATCH -J rcsim1k      # Job name
 #SBATCH -e rcsimu.%j       # Name of stderr error file
 #SBATCH -p normal          # Queue (partition) name
 #SBATCH -N 1               # Total # of nodes (must be 1 for serial)
