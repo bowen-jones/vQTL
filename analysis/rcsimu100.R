@@ -140,7 +140,7 @@ names(rc.simu)[1:n.runs] <- c(1:n.runs)
 rc.simu$mean <- apply(rc.simu, 1, mean)
 rc.simu$std.error <- apply(rc.simu, 1, sd)
 
-write.csv(rc.simu, file = "rcsimulation.csv")
+write.csv(rc.simu, file = "rcsimulation100.csv")
 
 end.time <- Sys.time()
 start.time-end.time
