@@ -9,5 +9,5 @@
 #SBATCH --mail-type=all    # Send email at begin and end of job
 
 # Other commands must follow all #SBATCH directives...
-Rscript --verbose ./rcsimu.R> ./output.Rout
+Rscript --verbose ./rcsim1k.R> ./output.Rout
 
