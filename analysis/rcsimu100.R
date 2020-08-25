@@ -1,5 +1,3 @@
-start.time <- Sys.time()
-
 require(dplyr); require(survival);
 
 logN.multi<-function(para, simu.obs.func,sep)
@@ -141,6 +139,3 @@ rc.simu$mean <- apply(rc.simu, 1, mean)
 rc.simu$std.error <- apply(rc.simu, 1, sd)
 
 write.csv(rc.simu, file = "rcsimulation100.csv")
-
-end.time <- Sys.time()
-start.time-end.time
