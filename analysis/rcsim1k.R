@@ -138,4 +138,4 @@ names(rc.simu)[1:n.runs] <- c(1:n.runs)
 rc.simu$mean <- apply(rc.simu, 1, mean)
 rc.simu$std.error <- apply(rc.simu, 1, sd)
 
-print(rc.simu)
+write.csv(rc.simu, "rcsim1k.csv")
