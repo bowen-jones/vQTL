@@ -1,4 +1,4 @@
-install.packages("ashr"); install.packages("dglm");
+install.packages("dglm"); install.packages("ashr"); 
 library(dplyr); library(dglm);
 library(ashr)
 
@@ -93,11 +93,11 @@ df.breed$Stress = as.numeric(as.character(df.breed$Stress))
 df.breed[,3:3237] =ifelse(df.breed[,3:3237]==1,"A","B")
 
 
-hybrid.inbred = read.csv("Fullinb&hyb.csv", header = FALSE)
+hybrid.inbred = read.csv("./Fullinb&hyb.csv", header = FALSE)
 hybrid.inbred = hybrid.inbred[,1:3240]
 hybrid.inbred = hybrid.inbred[,-c(2,3,5)]
 names(df.breed) = hybrid.inbred[1,]
-hybrid.inbred = read.csv("Fullinb&hyb.csv", header = TRUE)
+hybrid.inbred = read.csv("./Fullinb&hyb.csv", header = TRUE)
 hybrid.inbred = hybrid.inbred[-1]
 hybrid.inbred = hybrid.inbred[,-c(2,3,5)]
 df.breed = rbind(as.matrix(hybrid.inbred[1:2,]),as.matrix(df.breed))
