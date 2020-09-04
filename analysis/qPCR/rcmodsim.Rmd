@@ -177,3 +177,19 @@ rc.simu$mean <- apply(rc.simu, 1, mean)
 rc.simu$std.error <- apply(rc.simu, 1, sd)
 ```
 
+
+```{r}
+rcsim <- read.csv("C://Users//jones//Documents//STT//HPC output//rcsim1k.csv")
+rcsim$parameters <- c(39,1,2,rep(0,3),-5,3,4,rep(0,4))
+rcsim <- rcsim[,c(1,1004,1002,1003, 2:1001)]
+write.csv(rcsim, "rcsim1k.csv")
+```
+
+cALCULATE MSE
+```{r}
+for (i in 1:n.runs){
+  (rcsim[1,i+4]-rcsim[1,1])^2
+}
+```
+
+
