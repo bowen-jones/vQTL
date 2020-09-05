@@ -101,10 +101,11 @@ df.breed = as.data.frame(df.breed)
 names(df.breed)[c(1,2)] = c("stress", "breedtype") 
 
 df.breed$stress = as.character(df.breed$stress)
-df.breed$stress = as.numeric(df.breed$stress)
 rownames(df.breed) <- NULL;
 df.breed[1,1] = ""
 df.breed[2,1] = ""
+df.breed$stress = as.numeric(df.breed$stress)
+
 
 #df.breed = df.breed[,-c(2,3,5)]
 write.csv(df.breed, "simdata3.csv", row.names = FALSE)
@@ -122,8 +123,3 @@ simdata <- scanonevar(cross = test_full,
                       mean.formula = stress ~ BreedType*mean.QTL.add, 
                       var.formula = ~ BreedType*var.QTL.add, 
                       return.covar.effects = TRUE)
-
-
-################################################################################ dglm
-library(dglm)
-mod = dglm(stress ~ ., dformula = ~., data = df.breed)
