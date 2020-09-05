@@ -2,6 +2,9 @@ install.packages("dglm"); install.packages("ashr");
 library(dplyr); library(dglm);
 library(ashr)
 
+# Stampede2 Directory
+setwd("/work/07644/tg869432/stampede2/vQTL/")
+
 
 simu.rc.normal.multi.v2<-function(n.rep=3, n.level.env=2, n.obs.per.rep=150, 
                                   n.loci=3235, which.mean.loci=c(3:4), hypo.mean.para=c(1,4), 
