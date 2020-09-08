@@ -8,11 +8,11 @@ setwd("/work/07644/tg869432/stampede2/vQTL/")
 df.breed <- read.csv(file = "simdata3.csv")
 df.breed <- df.breed[-c(1,2),]
 
-mod = dglm(stress ~ ., dformula = ~., data = df.breed, subset = c(1:10))
+mod = dglm(stress ~ ., dformula = ~., data = df.breed)
 
-mod.test<-mod[1]
-t1<-ash(mod.test[1],mod.test[2])$result;
-results <- cbind(t1[,1:4],mod.test[,4]);
+dglm.out<-summary(mod)$coefficients
+t1<-ash(dglm.out[,1],dglm.out[,2])$result
+results <- cbind(t1[,1:4],dglm.out[,4]);
+names(results)[5] <- "dglm.p.value"
 
-write.csv(mod.test, "dglmcoeffs.csv")
 write.csv(results, "completeash.csv")
