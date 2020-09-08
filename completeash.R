@@ -1,5 +1,3 @@
-install.packages("dglm"); 
-install.packages("ashr"); 
 library(dglm);
 library(ashr);
 
