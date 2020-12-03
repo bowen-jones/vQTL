@@ -5,6 +5,7 @@ setwd("/work/07644/tg869432/stampede2/vQTL/")
 
 df.breed <- read.csv(file = "simdata3.csv")
 df.breed <- df.breed[-c(1,2),]
+df.breed$stress <- jitter(df.breed$stress, amount = 10)
 
 mod = dglm(stress ~ ., dformula = ~., data = df.breed)
 

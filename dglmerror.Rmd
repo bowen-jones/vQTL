@@ -1,0 +1,87 @@
+---
+title: "Determine Error"
+author: "Bowen Jones"
+date: "9/15/2020"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+library(dglm)
+```
+
+In `dglm()` call for df.breed data, error returned when fitting dispersion model.
+```{r}
+df.breed <- read.csv(file = "simdata3.csv")
+df.breed <- df.breed[-c(1,2),]
+
+sample <- c(round(runif(10, 1,900),0))
+
+mod = dglm(stress ~ ., dformula = ~., data = df.breed, subset = sample)
+```
+
+After reading the error output, I speculate that it is due to repeated stress values.
+```{r}
+length(unique(df.breed$stress))==length(df.breed$stress)
+```
+
+What if we add jitter to create fully unique values?
+```{r}
+df.breed$stress <- jitter(df.breed$stress)
+length(unique(df.breed$stress))==length(df.breed$stress)
+
+mod = dglm(stress ~ ., dformula = ~., data = df.breed[sample,])
+```
+
+Let's increase jitter.
+```{r}
+df.breed$stress <- jitter(df.breed$stress, amount = 1)
+mod = dglm(stress ~ ., dformula = ~., data = df.breed[sample,])
+```
+
+Again?
+```{r}
+df.breed$stress <- jitter(df.breed$stress, amount = 5)
+mod = dglm(stress ~ ., dformula = ~., data = df.breed[sample,])
+```
+
+
+
+Hmm. Let's see if we can reproduce this error. Start by simulating data.
+```{r}
+dat <- cbind(round(rnorm(100, 38, 2),0), rbinom(100,1,.5), rbinom(100,1,.5), rbinom(100,1,.5), rbinom(100,1,.5), rbinom(100,1,.5), rbinom(100,1,.5), rbinom(100,1,.5), rbinom(100,1,.5), rbinom(100,1,.5), rbinom(100,1,.5), rbinom(100,1,.5), rbinom(100,1,.5), rbinom(100,1,.5), rbinom(100,1,.5), rbinom(100,1,.5), rbinom(100,1,.5), rbinom(100,1,.5), rbinom(100,1,.5), rbinom(100,1,.5), rbinom(100,1,.5))
+dat <- as.data.frame(dat)
+
+length(unique(dat$V1))==length(dat$V1)
+```
+
+```{r}
+sample2 <- c(round(runif(10, 1,100),0))
+
+m <- dglm(V1 ~ ., dformula = ~.,  data = dat[sample2,])
+```
+Cool, got the error.
+
+Jitter?
+```{r}
+dat$V1 <- jitter(dat$V1, amount = 1)
+length(unique(dat$V1))
+m <- dglm(V1 ~ ., dformula = ~.,  data = dat[sample2,])
+```
+
+What if fewer predictors?
+```{r}
+data <- dat[,1:5]
+
+m <- dglm(V1 ~ ., dformula = ~.,  data = data[sample2,])
+```
+Great! Can we just change the formula?
+```{r}
+m <- dglm(V1 ~ ., dformula = ~ V2+V3+V4+V5, data = dat[sample2,])
+```
+
+
+Differences in formula?
+```{r}
+m <- dglm(V1 ~ V2+V3+V4+V5, dformula = ~ V2+V3+V4+V5, data = dat[sample2,])
+```
